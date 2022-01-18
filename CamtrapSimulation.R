@@ -1,30 +1,16 @@
-lim <- c(0,10)
-path <- pathgen(5e3, kTurn=2, kCor=TRUE, pTurn=1, 
-               logspeed=-2, speedSD=1, speedCor=0, 
-               xlim=lim, wrap=TRUE)
-plot_wrap(path, lineargs = list(col="grey"))
-r <- 6
-dz <- data.frame(x=5, y=2, r=r, th=1, dir=0)
-plot_dzone(dz, border=2)
-posdat <- sequence_data(path, dz)
-points(posdat$x, posdat$y, col=2, pch=16, cex=0.5)
-seqdat <- calc_speed(posdat)
-spdobs <- seqdat$speed[!is.na(seqdat$speed)]
-mean(spdobs)
-1/mean(1/spdobs, na.rm=TRUE)
-exp(-2)
-exp(mean(log(path$speed)))
-seqdat$points
-range(path$speed)
-
-
 library(circular)
 
-#AUTOCORRELATED RANDOM NORMAL DEVIATES - r is the autocorrelation term
-rautonorm <- function(n,mean,sd,r)
-{	ranfunc <- function(i,z,r) sqrt(1-r^2) * sum(z[2:(i+1)]*r^(i-(1:i))) + z[1]*r^i
-z <- rnorm(n)
-mean + sd*c(z[1], sapply(1:(n-1), ranfunc, z, r))
+## rautonorm
+##Generates a set of autocorrelated random normal variates
+#
+#INPUT
+# n: number of variates to generate
+# mean, sd: mean and standard deviation of the normal distribution
+# r: the autocorrelation coefficient (between 0 and 1)
+rautonorm <- function(n,mean=0,sd=1,r){
+  ranfunc <- function(i,z,r) sqrt(1-r^2) * sum(z[2:(i+1)]*r^(i-(1:i))) + z[1]*r^i
+  z <- rnorm(n)
+  mean + sd*c(z[1], sapply(1:(n-1), ranfunc, z, r))
 }
 
 ## pathgen
