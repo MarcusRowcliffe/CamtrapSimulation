@@ -1,4 +1,5 @@
-  library(circular)
+
+library(circular)
 
 ## rautonorm
 ##Generates a set of autocorrelated random normal variates
